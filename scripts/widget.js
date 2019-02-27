@@ -76,7 +76,6 @@ function exportMedium() {
           }
         } else {
           const story = parseJsonToMarkdown(res);
-          console.log(story);
           title = story.title;
           const temp = activeTab.url
             .split("/")
@@ -122,7 +121,6 @@ function parseJsonToMarkdown(jsonStr) {
   if (!data.payload) {
     return null;
   }
-  console.log(data);
   article = data.payload.value || data.payload.post;
   let story = {};
   story.title = article.title;
@@ -184,7 +182,7 @@ function processSection(s) {
 }
 
 function processParagraph(p, sequence) {
-  const markups_array = createMarkupsArray(p.markups);
+  const markups_array = createMarkupsArray(p.markups,p.type);
   if (markups_array.length > 0) {
     let previousIndex = 0,
       text = p.text,
@@ -286,9 +284,9 @@ function addMarkup(markups_array, open, close, start, end) {
   return markups_array;
 }
 
-function createMarkupsArray(markups) {
+function createMarkupsArray(markups,pType) {
   let markups_array = [];
-  if (!markups || markups.length === 0) {
+  if (!markups || markups.length === 0||pType===8) {
     return markups_array;
   }
   for (let i = 0; i < markups.length; i++) {
