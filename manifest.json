@@ -1,23 +1,23 @@
 {
-    "name":"Export to Markdown",
-    "short_name":"ExportToMarkdown",
     "description":"This is utilized to export the story in Medium to a markdown format file.",
-    "version":"0.1.8",
+    "short_name":"ExportToMarkdown",
     "icons":{
-        "16":"icons/medium-16.png",
-        "48":"icons/medium-48.png",
+        "128":"icons/medium.png",
         "64":"icons/medium-64.png",
-        "128":"icons/medium.png"
+        "48":"icons/medium-48.png",
+        "16":"icons/medium-16.png"
     },
-    "permissions":[
-        "tabs",
-        "https://*/*"
-    ],
+    "name":"Export to Markdown\uff08\u6398\u91d1\u7ffb\u8bd1\u8ba1\u5212\u7248\uff09",
+    "homepage_url":"https://github.com/neal1991/export-medium",
+    "version":"0.2.1",
+    "manifest_version":2,
     "browser_action":{
         "default_title":"Export to Markdown",
         "default_icon":"icons/medium.png",
         "default_popup":"popup.html"
     },
-    "manifest_version":2,
-    "homepage_url":"https://github.com/neal1991/export-medium"
+    "permissions":[
+        "tabs",
+        "https://*/*"
+    ]
 }

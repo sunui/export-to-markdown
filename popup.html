@@ -6,21 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     textarea {
-      width: 800px;
-      height: 600px;
+      width: 760px;
+      height:540px;
     }
 
-    .history-list {
-      font-size: 18px
+    .buttons{
+      padding-bottom: 5px;
     }
 
-    body {
-      width: 800px;
-      height: 600px;
-    }
-
-    .buttons li {
-      list-style: none;
+    .buttons span {
       display: inline;
       margin-right: 5px;
       font-weight: bold;
@@ -44,13 +38,6 @@
       background-color: #000;
       opacity: .2;
       filter: alpha(opacity=20);
-    }
-
-    ul img {
-      width: 1.5rem;
-      height: 1.5rem;
-      position: relative;
-      top: .4rem;
     }
 
     .load {
@@ -104,23 +91,21 @@
       }
     }
   </style>
-  <title>export to markdown</title>
+  <title>export to markdown (掘金翻译计划版)</title>
 </head>
 
 <body>
 
   <div class="main">
-    <ul class="buttons">
-      <li><button class="copy">copy to clipboard</button></li>
-      <li><button class="history">history</button></li>
-    </ul>
+    <div class="buttons">
+      <span><button class="copy">复制</button></span>
+    </div>
 
     <span><img src="load.svg" class="load"></span>
     <div class="left-area">
       <textarea id="source"></textarea>
     </div>
   </div>
-  <script src="scripts/snarkdown.js"></script>
   <script src="scripts/turndown.min.js"></script>
   <script src="scripts/widget.js"></script>
 </body>

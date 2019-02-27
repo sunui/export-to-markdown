@@ -19,6 +19,14 @@ A Chrome extension to export the story in Medium to a markdown format file. And 
 Run ` python build.py` to generate the zip file
 
 ## Changelog
+### v0.2.0
+* 汉化
+* 直接套入掘金翻译模板
+* 去除了历史功能
+* 调整了UI
+* 支持生成原文地址作者markdown地址等
+
+
 ### v0.1.7
 * enable to export after clike the icon of the extension
 * enable copy to clipboard indication
