@@ -158,12 +158,13 @@ function parseJsonToMarkdown(jsonStr) {
     } else {
       sequence = 0;
     }
-    const text = processParagraph(p, sequence);
+    const text = processParagraph(p, sequence,i>0?paragraphs[i-1].type:0,i<paragraphs.length-1?paragraphs[i+1].type:0);
     lastPtype = p.type;
     if (text !== story.markdown[i]) {
       story.markdown.push(text);
     }
   }
+  console.log(story)
   return story;
 }
 
@@ -181,7 +182,7 @@ function processSection(s) {
   return section;
 }
 
-function processParagraph(p, sequence) {
+function processParagraph(p, sequence,preType,nextType) {
   const markups_array = createMarkupsArray(p.markups,p.type);
   if (markups_array.length > 0) {
     let previousIndex = 0,
@@ -225,7 +226,7 @@ function processParagraph(p, sequence) {
       p.text = "> # " + p.text.replace(/\n/g, "\n> #");
       break;
     case 8:
-      p.text = "\n    " + p.text.replace(/\n/g, "\n    ");
+      p.text = (preType===8?"\n":"\n```\n") + p.text.replace(/\n/g, "\n")+(nextType===8?"":"\n```");
       break;
     case 9:
       markup = "\n* ";
