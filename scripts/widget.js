@@ -140,7 +140,10 @@ function parseJsonToMarkdown(jsonStr) {
   let sections = [];
   for (let i = 0; i < story.sections.length; i++) {
     const s = story.sections[i];
-    const section = processSection(s);
+    let section = processSection(s);
+    if(i===0){
+      section=""
+    }
     sections[s.startIndex] = section;
   }
 
@@ -169,11 +172,11 @@ function parseJsonToMarkdown(jsonStr) {
 }
 
 function processSection(s) {
-  let section = "";
+  let section = "\n***\n";
   if (s.backgroundImage) {
     const imageWidth = parseInt(s.backgroundImage.originalWidth, 10);
     const imageSrc =
-      MEDIYM_IMG_CDN +
+      "https://cdn-images-1.medium.com/max/" +
       Math.max(imageWidth * 2, 2000) +
       "/" +
       s.backgroundImage.id;
@@ -209,10 +212,10 @@ function processParagraph(p, sequence,preType,nextType) {
       markup = "\n";
       break;
     case 2:
-      p.text = "\n# " + p.text.replace(/\n/g, "\n #");
+      p.text = "\n# " + p.text.replace(/\n/g, "\n# ");
       break;
     case 3:
-      p.text = "\n## " + p.text.replace(/\n/g, "\n ##");
+      p.text = "\n## " + p.text.replace(/\n/g, "\n## ");
       break;
     case 4:
       const imageWidth = parseInt(p.metadata.originalWidth, 10);
@@ -224,7 +227,7 @@ function processParagraph(p, sequence,preType,nextType) {
       markup = ">  ";
       break;
     case 7:
-      p.text = "> # " + p.text.replace(/\n/g, "\n> #");
+      p.text = "> # " + p.text.replace(/\n/g, "\n> # ");
       break;
     case 8:
       p.text = (preType===8?"\n":"\n```\n") + p.text.replace(/\n/g, "\n")+(nextType===8?"":"\n```");
@@ -264,33 +267,36 @@ function processParagraph(p, sequence,preType,nextType) {
 // for the first position is space
 function processMarkupSpace(tokens) {
   
-  // let times = 0; // markup times
-  var min=0
-  var max=tokens.length
+  let times = 0; // ** times
   for (let i = 0; i < tokens.length; i++) {
     const ele = tokens[i];
-    if (ele === "**" || ele === "[" || ele === "]") {
-      if(i<max){
-        min=i;
-        if (tokens[i + 1] && tokens[i + 1][0] === " ") {
-          tokens[i + 1] = tokens[i + 1].substring(1);
-          tokens[i - 1] = tokens[i - 1] + " ";
-          i = i + 1;
-        }
-  
-        for (let j = tokens.length; j > min; j--) {
-          if (ele === "**" || ele === "[" || ele === "]") {
-          max=j
-          if (tokens[i - 1] && tokens[i - 1][(tokens[i - 1].length-1)] === " ") {
-            tokens[i - 1] = tokens[i - 1].substring(0,tokens[i - 1].length-1);
-            tokens[i + 1] = " "+tokens[i + 1];
-            i = i + 1;
-          }
-        }
-        }
-
+    if (ele.indexOf("**")>-1) {
+      times = times + 1;
+      // 奇数后的空格
+      if (times % 2 === 1 && tokens[i + 1] && tokens[i + 1][0] === " ") {
+        tokens[i + 1] = tokens[i + 1].substring(1);
+        tokens[i - 1] = tokens[i - 1] + " ";
+        i = i + 1;
+      }
+      // 偶数前的空格
+      if (times % 2 === 0 && tokens[i - 1] && tokens[i - 1][(tokens[i - 1].length-1)] === " ") {
+        tokens[i - 1] = tokens[i - 1].substring(0,tokens[i - 1].length-1);
+        tokens[i + 1] = " "+tokens[i + 1];
+        i = i + 1;
       }
     }
+
+    if (ele === "["&&tokens[i + 1] && tokens[i + 1][0] === " ") {
+      tokens[i + 1] = tokens[i + 1].substring(1);
+      tokens[i - 1] = tokens[i - 1] + " ";
+      i = i + 1;
+    }
+    if (ele === "]"&&tokens[i - 1] && tokens[i - 1][(tokens[i - 1].length-1)] === " ") {
+      tokens[i - 1] = tokens[i - 1].substring(0,tokens[i - 1].length-1);
+      tokens[i + 1] = " "+tokens[i + 1];
+      i = i + 1;
+    }
+    
   }
   return tokens;
 }
