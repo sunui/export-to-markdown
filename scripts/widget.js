@@ -197,6 +197,7 @@ function processParagraph(p, sequence,preType,nextType) {
         tokens.push(markups_array[j]);
       }
     }
+  
     tokens = processMarkupSpace(tokens);
     tokens.push(text.substring(j - 1));
     p.text = tokens.join("");
@@ -248,6 +249,12 @@ function processParagraph(p, sequence,preType,nextType) {
 
   p.text = markup + p.text + "\n";
 
+
+  // 除了代码块之外的小于号避免被md作为标签处理
+  if(p.type!==8){
+    p.text = p.text.replace(/</g,"\\<");
+  }
+
   if (p.alignment === 2 && p.type !== 6 && p.type !== 7) {
     p.text = "<center>" + p.text + "</center>";
   }
@@ -256,15 +263,32 @@ function processParagraph(p, sequence,preType,nextType) {
 
 // for the first position is space
 function processMarkupSpace(tokens) {
-  let times = 0; // markup times
+  
+  // let times = 0; // markup times
+  var min=0
+  var max=tokens.length
   for (let i = 0; i < tokens.length; i++) {
     const ele = tokens[i];
-    if (ele === "**" || ele === "*" || ele === "[" || ele === "]") {
-      times = times + 1;
-      if (times % 2 === 1 && tokens[i + 1] && tokens[i + 1][0] === " ") {
-        tokens[i + 1] = tokens[i + 1].substring(1);
-        tokens[i - 1] = tokens[i - 1] + " ";
-        i = i + 1;
+    if (ele === "**" || ele === "[" || ele === "]") {
+      if(i<max){
+        min=i;
+        if (tokens[i + 1] && tokens[i + 1][0] === " ") {
+          tokens[i + 1] = tokens[i + 1].substring(1);
+          tokens[i - 1] = tokens[i - 1] + " ";
+          i = i + 1;
+        }
+  
+        for (let j = tokens.length; j > min; j--) {
+          if (ele === "**" || ele === "[" || ele === "]") {
+          max=j
+          if (tokens[i - 1] && tokens[i - 1][(tokens[i - 1].length-1)] === " ") {
+            tokens[i - 1] = tokens[i - 1].substring(0,tokens[i - 1].length-1);
+            tokens[i + 1] = " "+tokens[i + 1];
+            i = i + 1;
+          }
+        }
+        }
+
       }
     }
   }
@@ -273,12 +297,12 @@ function processMarkupSpace(tokens) {
 
 function addMarkup(markups_array, open, close, start, end) {
   if (markups_array[start]) {
-    markups_array[start] += open;
+    markups_array[start] = markups_array[start]+open;
   } else {
     markups_array[start] = open;
   }
   if (markups_array[end]) {
-    markups_array[end] += close;
+    markups_array[end] = close+markups_array[end];
   } else {
     markups_array[end] = close;
   }
@@ -290,6 +314,7 @@ function createMarkupsArray(markups,pType) {
   if (!markups || markups.length === 0||pType===8) {
     return markups_array;
   }
+  markups=markups.sort((a,b)=>(b.end-b.start)-(a.end-a.start))
   for (let i = 0; i < markups.length; i++) {
     const m = markups[i];
     switch (m.type) {
@@ -297,16 +322,16 @@ function createMarkupsArray(markups,pType) {
         addMarkup(markups_array, "**", "**", m.start, m.end);
         break;
       case 2: // italic
-        addMarkup(markups_array, "*", "*", m.start, m.end);
+        addMarkup(markups_array, "**", "**", m.start, m.end);
         break;
       case 3: // anchor tag
         addMarkup(markups_array, "[", "](" + m.href + ")", m.start, m.end);
         break;
-      // case 10: // code tag
-      //   if (m.end - m.start < 30) {
-      //     addMarkup(markups_array, '`', '`', m.start, m.end)
-      //   }
-      //   break
+      case 10: // code tag
+        if (m.end - m.start < 30) {
+          addMarkup(markups_array, '`', '`', m.start, m.end)
+        }
+        break
       default:
         console.log("Unknown markup type" + m.type, m);
         break;
