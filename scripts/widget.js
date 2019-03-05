@@ -77,19 +77,11 @@ function exportMedium() {
         } else {
           const story = parseJsonToMarkdown(res);
           title = story.title;
-          const temp = activeTab.url
-            .split("/")
-            .reverse()[0]
-            .split("-");
-          temp.pop();
+          slug=story.slug
           markdownText = `> * 原文地址：[${title}](${activeTab.url})
 > * 原文作者：[${story.author.name}](${story.author.url})
 > * 译文出自：[掘金翻译计划](https://github.com/xitu/gold-miner)
-> * 本文永久链接：[https://github.com/xitu/gold-miner/blob/master/TODO1/${temp.join(
-            "-"
-          )}.md](https://github.com/xitu/gold-miner/blob/master/TODO1/${temp.join(
-            "-"
-          )}.md)
+> * 本文永久链接：[https://github.com/xitu/gold-miner/blob/master/TODO1/${slug}.md](https://github.com/xitu/gold-miner/blob/master/TODO1/${slug}.md)
 > * 译者：
 > * 校对者：
 ${story.markdown.join("")}
@@ -131,6 +123,7 @@ function parseJsonToMarkdown(jsonStr) {
   story.license = article.license;
   story.sections = article.content.bodyModel.sections;
   story.paragraphs = article.content.bodyModel.paragraphs;
+  story.slug=article.slug
   var author = Object.values(data.payload.references.User)[0];
   story.author = {
     name: author.name || "",
