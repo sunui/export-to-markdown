@@ -84,6 +84,8 @@ function exportMedium() {
 > * 本文永久链接：[https://github.com/xitu/gold-miner/blob/master/TODO1/${slug}.md](https://github.com/xitu/gold-miner/blob/master/TODO1/${slug}.md)
 > * 译者：
 > * 校对者：
+
+# ${title}
 ${story.markdown.join("")}
 > 如果发现译文存在错误或其他需要改进的地方，欢迎到 [掘金翻译计划](https://github.com/xitu/gold-miner) 对译文进行修改并 PR，也可获得相应奖励积分。文章开头的 **本文永久链接** 即为本文在 GitHub 上的 MarkDown 链接。
 
@@ -130,6 +132,11 @@ function parseJsonToMarkdown(jsonStr) {
     url: `https://medium.com/@${author.username}`
   };
 
+  const paragraphs = story.paragraphs.filter((p,i)=>{
+    // console.log(p.text,article.title)
+    return !((i==0||i==1)&&(p.text.replace(/(\s)/g, "")===article.title.replace(/(\s)/g, "")))
+  });
+
   let sections = [];
   for (let i = 0; i < story.sections.length; i++) {
     const s = story.sections[i];
@@ -142,7 +149,6 @@ function parseJsonToMarkdown(jsonStr) {
 
   story.markdown = [];
 
-  const paragraphs = story.paragraphs;
   let sequence = 0;
   for (let i = 0; i < paragraphs.length; i++) {
     if (sections[i]) {
@@ -169,7 +175,7 @@ function processSection(s) {
   if (s.backgroundImage) {
     const imageWidth = parseInt(s.backgroundImage.originalWidth, 10);
     const imageSrc =
-      "https://cdn-images-1.medium.com/max/" +
+      MEDIUM_IMG_CDN +
       Math.max(imageWidth * 2, 2000) +
       "/" +
       s.backgroundImage.id;
@@ -217,7 +223,7 @@ function processParagraph(p, sequence,preType,nextType) {
       p.text = "\n![" + p.text + "](" + imageSrc + ")";
       break;
     case 6:
-      markup = ">  ";
+      markup = "> ";
       break;
     case 7:
       p.text = "> # " + p.text.replace(/\n/g, "\n> # ");
@@ -243,7 +249,11 @@ function processParagraph(p, sequence,preType,nextType) {
       break;
   }
 
+  if(p.text[0]==="⦁"){
+    p.text="-"+(p.text[1]===" "?"":" ")+p.text.substring(1)
+  }
   p.text = markup + p.text + "\n";
+
 
 
   // 除了代码块之外的小于号避免被md作为标签处理
@@ -313,7 +323,12 @@ function createMarkupsArray(markups,pType) {
   if (!markups || markups.length === 0||pType===8) {
     return markups_array;
   }
+  //标题一律取消加粗
+  if(pType===2||pType===3||pType===13){
+    markups=markups.filter(m=>!(m.type==1||m.type))
+  }
   markups=markups.sort((a,b)=>(b.end-b.start)-(a.end-a.start))
+
   for (let i = 0; i < markups.length; i++) {
     const m = markups[i];
     switch (m.type) {
