@@ -2,9 +2,11 @@ let mainDiv = document.querySelector(".main");
 const loadIcon = document.querySelector(".load");
 const sourceDiv = document.querySelector("#source");
 const copyBtn = document.querySelector(".copy");
+const createBtn = document.querySelector(".create");
 const rightAreaDiv = document.querySelector(".right-area");
 const MEDIUM_IMG_CDN = "https://cdn-images-1.medium.com/max/";
 
+var bg = chrome.extension.getBackgroundPage();
 window.onload = function() {
   if (sourceDiv.style.display === "none") {
     sourceDiv.style.display = null;
@@ -14,13 +16,21 @@ window.onload = function() {
   exportMedium();
 };
 
-document.querySelector(".copy").addEventListener("click", function() {
+copyBtn.addEventListener("click", function() {
   copyBtn.innerText = "已复制";
   const value = document.querySelector("#source").value;
   copyToClipboard(value);
   setTimeout(function() {
     copyBtn.innerText = "复制";
   }, 2000);
+});
+
+createBtn.addEventListener("click", function() {
+  const value = document.querySelector("#source").value;
+  copyToClipboard(value);
+  bg.data=value;
+
+  window.open("https://github.com/xitu/gold-miner/new/master/TODO1")
 });
 
 function createLoadForm() {
