@@ -7,6 +7,14 @@
             "js":[
                 "scripts/github.js"
             ]
+        },
+        {
+            "matches":[
+                "*://github.com/xitu/gold-miner*"
+            ],
+            "js":[
+                "scripts/wiki.js"
+            ]
         }
     ],
     "name":"Export to Markdown\uff08\u6398\u91d1\u7ffb\u8bd1\u8ba1\u5212\u7248\uff09",
