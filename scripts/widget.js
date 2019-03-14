@@ -25,6 +25,14 @@ copyBtn.addEventListener("click", function() {
   }, 2000);
 });
 
+createBtn.addEventListener("click", function() {
+  const value = document.querySelector("#source").value;
+  copyToClipboard(value);
+  bg.data=value;
+
+  window.open("https://github.com/xitu/gold-miner/new/master/TODO1")
+});
+
 function createLoadForm() {
   let shadow = document.createElement("div");
   shadow.id = "shadow";
@@ -97,12 +105,6 @@ ${story.markdown.join("")}
         }
         cancelLoad();
         document.querySelector("#source").value = markdownText;
-
-        createBtn.addEventListener("click", function() {
-          copyToClipboard(markdownText);
-          bg.data=markdownText;
-          window.open(`https://github.com/xitu/gold-miner/new/master/TODO1?filename=${slug}.md`)
-        });
       })
       .catch(function(err) {
         console.error(err);
