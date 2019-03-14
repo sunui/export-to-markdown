@@ -17,7 +17,7 @@
             ]
         }
     ],
-    "description":"This is utilized to export the story in Medium to a markdown format file.",
+    "name":"Export to Markdown\uff08\u6398\u91d1\u7ffb\u8bd1\u8ba1\u5212\u7248\uff09",
     "short_name":"ExportToMarkdown",
     "icons":{
         "128":"icons/medium.png",
@@ -27,7 +27,7 @@
     },
     "manifest_version":2,
     "homepage_url":"https://github.com/sunui/export-to-markdown",
-    "version":"0.2.8",
+    "version":"0.2.9",
     "background":{
         "scripts":[
             "scripts/background.js"
@@ -38,9 +38,9 @@
         "https://*/*"
     ],
     "browser_action":{
-        "default_title":"Export to Markdown\uff08\u6398\u91d1\u7ffb\u8bd1\u8ba1\u5212\u7248\uff09",
         "default_icon":"icons/medium.png",
-        "default_popup":"popup.html"
+        "default_popup":"popup.html",
+        "default_title":"Export to Markdown\uff08\u6398\u91d1\u7ffb\u8bd1\u8ba1\u5212\u7248\uff09"
     },
-    "name":"Export to Markdown\uff08\u6398\u91d1\u7ffb\u8bd1\u8ba1\u5212\u7248\uff09"
+    "description":"This is utilized to export the story in Medium to a markdown format file."
 }
