@@ -10,6 +10,14 @@
         },
         {
             "matches":[
+                "*://github.com/xitu/gold-miner/issues/new*"
+            ],
+            "js":[
+                "scripts/newissue.js"
+            ]
+        },
+        {
+            "matches":[
                 "*://github.com/xitu/gold-miner*"
             ],
             "js":[

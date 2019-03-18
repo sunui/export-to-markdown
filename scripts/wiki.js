@@ -12,6 +12,31 @@
     bindEvent: function() {},
     init: function() {
       this.bindEvent();
+      var newNode = document.createElement("div");
+      newNode.style.position = "absolute";
+      newNode.style.top = "134px";
+      newNode.style.left = "6px";
+      newNode.style.zIndex = "999";
+      newNode.innerHTML = ` 
+<svg id="tpointer" style="cursor:pointer" width="38px" height="18px" viewBox="0 0 88 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<!-- Generator: Sketch 3.8.3 (29802) - http://www.bohemiancoding.com/sketch -->
+<title>Slice 16</title>
+<desc>Created with Sketch.</desc>
+<defs></defs>
+<g id="0.1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Group-14" transform="translate(1.000000, 5.000000)" fill="#006CFF">
+        <path d="M21.2934328,2.58313049 L18.0173984,0 L14.594624,2.69887801 L14.4172077,2.84182304 L18.0173984,5.71242483 L21.6286578,2.84182304 L21.2934328,2.58313049 Z M33.7078289,12.6006674 L18.0079109,24.980276 L2.31748044,12.6082574 L0,14.4697052 L18.0079109,28.6690167 L36.0256256,14.4621152 L33.7078289,12.6006674 Z M18.0079109,13.6050776 L9.46441554,6.86863505 L7.14661885,8.7300829 L18.0079109,17.2941345 L28.8783742,8.7224929 L26.5605775,6.86104505 L18.0079109,13.6050776 Z" id="Fill-1-Copy"></path>
+        </g>
+        
+</g>
+
+</svg><div style="background-color:#f6f8fa" id="juejintable"></div>
+`;
+      find("body").appendChild(newNode);
+
+      this.getIssues();
+    },
+    getIssues() {
       const data = {
         variables: JSON.stringify({
           number_of_issues: 80,
@@ -105,39 +130,41 @@
             });
           });
           console.table(analysis);
-          var newNode = document.createElement("div");
-          newNode.style.position = "absolute";
-          newNode.style.top = "240px";
-          newNode.style.left = "10px";
-          newNode.style.width = "160px";
+          find("#tpointer").onclick = function showtt() {
+            const tt = document.createElement("div");
+            tt.innerHTML =
+              `
+  <div style="width:160px" class="js-navigation-container js-active-navigation-container">
+    <div class="Box-row Box-row--focus-gray p-0 js-navigation-item js-issue-row selectable read border-bottom">
+    <div class="border d-table table-fixed width-full Box-row--drag-hide position-relative">
+    <div class="float-left col-6">板块</div>
+    <div class="float-left col-3">近1周</div>
+    <div class="float-right col-3">近1月</div></div>` +
+              analysis
+                .map(line => {
+                  return `
+         <div class="border-top border-left border-right d-table table-fixed width-full Box-row--drag-hide position-relative">
+         <div class="float-left col-6">
+         ${line.key}
+         </div>
+         <div class="float-left col-3">
+         ${line.week}
+         </div>
+         <div class="float-right col-3">
+         ${line.month}
+         </div> </div>`;
+                })
+                .join("") +
+              `</div></div>`;
+            find("#juejintable").appendChild(tt);
 
-          newNode.innerHTML =
-            `
-<div class="js-navigation-container js-active-navigation-container">
-  <div class="Box-row Box-row--focus-gray p-0 js-navigation-item js-issue-row selectable read border-bottom">
-  <div class="border d-table table-fixed width-full Box-row--drag-hide position-relative">
-  <div class="float-left col-6">板块</div>
-  <div class="float-left col-3">本周</div>
-  <div class="float-right col-3">本月</div></div>` +
-            analysis
-              .map(line => {
-                return `
-       <div class="border-top border-left border-right d-table table-fixed width-full Box-row--drag-hide position-relative">
-       <div class="float-left col-6">
-       ${line.key}
-       </div>
-       <div class="float-left col-3">
-       ${line.week}
-       </div>
-       <div class="float-right col-3">
-       ${line.month}
-       </div> </div>`;
-              })
-              .join("") +
-            `</div></div>`;
-          find("body").appendChild(newNode);
+            find("#tpointer").onclick = () => {
+              find("#juejintable").innerHTML = "";
+              find("#tpointer").onclick = showtt;
+            };
+          };
         });
-    }
+    },
   };
 
   Page.init();
