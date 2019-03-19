@@ -25,7 +25,7 @@
         query: `
         {
           repository(owner: "xitu", name: "gold-miner") {
-            pullRequests(states: MERGED,last: 50) {
+            pullRequests(states: MERGED,last: 20) {
               nodes {
                 mergedAt
                 title
