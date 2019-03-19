@@ -21,7 +21,8 @@
                 "*://github.com/xitu/gold-miner*"
             ],
             "js":[
-                "scripts/wiki.js"
+                "scripts/wiki.js",
+                "scripts/delay.js"
             ]
         }
     ],
