@@ -25,7 +25,7 @@
         query: `
         {
           repository(owner: "xitu", name: "gold-miner") {
-            pullRequests(states: MERGED,last: 20) {
+            pullRequests(states: MERGED,last: 40) {
               nodes {
                 mergedAt
                 title
@@ -36,7 +36,7 @@
                 }
               }
             }
-            issues(last:100,labels:["正在翻译","翻译完成","正在校对","翻译认领"]){
+            issues(last:100,labels:["正在翻译","翻译完成","正在校对","翻译认领","请到对应的 PR 下认领校对"]){
               nodes{
                 title
                 body
