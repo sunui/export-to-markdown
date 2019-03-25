@@ -86,7 +86,7 @@
             return fetch(raw)
           })).then(a=>{
            a.map(r=>{
-              return r.text().then(r=>{
+              return r.ok&&r.text().then(r=>{
                 const texts=r.split("\n")
                 const ob={
                   title:texts[0].match(/(?<=\[).+(?=\])/)[0],
