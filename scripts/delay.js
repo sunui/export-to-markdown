@@ -80,7 +80,7 @@
           const issues=res.data.repository.issues.nodes
           .map(issue => {
             
-            const ed=issue.comments.nodes.find(co=>{
+            const ed=issue.comments.nodes.reverse().find(co=>{
               return (co.author.login==="fanyijihua")&&
               co.body.includes("棒极啦 :tada:")
             })
@@ -88,7 +88,7 @@
             return {
               id:issue.number,
               delay:ed&&(new Date().getTime()-new Date(ed.createdAt).getTime())/(1000*60*60*24),
-              days:Number(issue.body.match(/(?<=翻译时间：).+(?=天)/)[0])
+              days:Number(issue.body.match(/(?<=翻译时间：).+(?=天)/)&&issue.body.match(/(?<=翻译时间：).+(?=天)/)[0])||10
             }
             
           }).filter(i=>i.delay>i.days)
