@@ -28,9 +28,9 @@ copyBtn.addEventListener("click", function() {
 createBtn.addEventListener("click", function() {
   const value = document.querySelector("#source").value;
   copyToClipboard(value);
-  bg.data=value;
+  bg.data = value;
 
-  window.open("https://github.com/xitu/gold-miner/new/master/TODO1")
+  window.open("https://github.com/xitu/gold-miner/new/master/TODO1");
 });
 
 function createLoadForm() {
@@ -53,8 +53,6 @@ function exportMedium() {
   ) {
     const activeTab = arrayOfTabs[0];
     const url = activeTab.url + "?format=json";
-    isHtml =
-      url.indexOf("elastic") !== -1 || url.indexOf("logz.io/blog") !== -1;
     fetch(url)
       .then(function(res) {
         if (res.ok) {
@@ -68,26 +66,44 @@ function exportMedium() {
       .then(function(res) {
         let markdownText = "";
         let title = "";
+        var isHtml = false;
+        try {
+          const str = res.substring(16, res.length);
+          const temp = JSON.parse(str);
+        } catch {
+          isHtml = true;
+        }
+
         if (isHtml) {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(res, "text/html");
-          var blog =
-            doc.querySelector(".article-post-wrapper") ||
-            doc.querySelector("#content");
-          titleDoc =
-            doc.querySelector(".full-bleed-data h2") ||
-            doc.querySelector(".container .text-center h1");
-          const title = titleDoc.innerText;
-          const turndownService = new TurndownService();
-          if (title != null) {
-            markdownText = "# " + title + "\n" + turndownService.turndown(blog);
-          } else {
-            markdownText = turndownService.turndown(blog);
-          }
+          fetch(activeTab.url)
+            .then(r => r.text())
+            .then(res => {
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(res, "text/html");
+              var blog =
+                doc.querySelector("main") ||
+                doc.querySelector(".main") ||
+                doc.querySelector("#main") ||
+                doc.querySelector("#content") ||
+                doc.querySelector("body");
+
+              console.log(activeTab.url, blog);
+              const turndownService = new TurndownService();
+              markdownText = turndownService.turndown(blog);
+              document.querySelector("#source").value = markdownText;
+            })
+            .catch(function(err) {
+              console.error(err);
+              markdownText =
+                "网站" + activeTab.url + " 可能还不支持\n错误信息:" + err;
+              document.querySelector("#source").value = markdownText;
+              cancelLoad();
+            });
+          cancelLoad();
         } else {
           const story = parseJsonToMarkdown(res);
           title = story.title;
-          slug=story.slug
+          slug = story.slug;
           markdownText = `> * 原文地址：[${title}](${activeTab.url})
 > * 原文作者：[${story.author.name}](${story.author.url})
 > * 译文出自：[掘金翻译计划](https://github.com/xitu/gold-miner)
@@ -102,13 +118,12 @@ ${story.markdown.join("")}
 ---
 
 > [掘金翻译计划](https://github.com/xitu/gold-miner) 是一个翻译优质互联网技术文章的社区，文章来源为 [掘金](https://juejin.im) 上的英文分享文章。内容覆盖 [Android](https://github.com/xitu/gold-miner#android)、[iOS](https://github.com/xitu/gold-miner#ios)、[前端](https://github.com/xitu/gold-miner#前端)、[后端](https://github.com/xitu/gold-miner#后端)、[区块链](https://github.com/xitu/gold-miner#区块链)、[产品](https://github.com/xitu/gold-miner#产品)、[设计](https://github.com/xitu/gold-miner#设计)、[人工智能](https://github.com/xitu/gold-miner#人工智能)等领域，想要查看更多优质译文请持续关注 [掘金翻译计划](https://github.com/xitu/gold-miner)、[官方微博](http://weibo.com/juejinfanyi)、[知乎专栏](https://zhuanlan.zhihu.com/juejinfanyi)。`;
+          document.querySelector("#source").value = markdownText;
         }
         cancelLoad();
-        document.querySelector("#source").value = markdownText;
       })
       .catch(function(err) {
         console.error(err);
-        document.querySelector(".left-area").display = "none";
         markdownText =
           "网站" + activeTab.url + " 可能还不支持\n错误信息:" + err;
         document.querySelector("#source").value = markdownText;
@@ -135,24 +150,27 @@ function parseJsonToMarkdown(jsonStr) {
   story.license = article.license;
   story.sections = article.content.bodyModel.sections;
   story.paragraphs = article.content.bodyModel.paragraphs;
-  story.slug=article.slug
+  story.slug = article.slug;
   var author = Object.values(data.payload.references.User)[0];
   story.author = {
     name: author.name || "",
     url: `https://medium.com/@${author.username}`
   };
 
-  const paragraphs = story.paragraphs.filter((p,i)=>{
+  const paragraphs = story.paragraphs.filter((p, i) => {
     // console.log(p.text,article.title)
-    return !((i==0||i==1)&&(p.text.replace(/(\s)/g, "")===article.title.replace(/(\s)/g, "")))
+    return !(
+      (i == 0 || i == 1) &&
+      p.text.replace(/(\s)/g, "") === article.title.replace(/(\s)/g, "")
+    );
   });
 
   let sections = [];
   for (let i = 0; i < story.sections.length; i++) {
     const s = story.sections[i];
     let section = processSection(s);
-    if(i===0){
-      section=""
+    if (i === 0) {
+      section = "";
     }
     sections[s.startIndex] = section;
   }
@@ -170,13 +188,18 @@ function parseJsonToMarkdown(jsonStr) {
     } else {
       sequence = 0;
     }
-    const text = processParagraph(p, sequence,i>0?paragraphs[i-1].type:0,i<paragraphs.length-1?paragraphs[i+1].type:0);
+    const text = processParagraph(
+      p,
+      sequence,
+      i > 0 ? paragraphs[i - 1].type : 0,
+      i < paragraphs.length - 1 ? paragraphs[i + 1].type : 0
+    );
     lastPtype = p.type;
     if (text !== story.markdown[i]) {
       story.markdown.push(text);
     }
   }
-  console.log(story)
+  console.log(story);
   return story;
 }
 
@@ -194,8 +217,8 @@ function processSection(s) {
   return section;
 }
 
-function processParagraph(p, sequence,preType,nextType) {
-  const markups_array = createMarkupsArray(p.markups,p.type);
+function processParagraph(p, sequence, preType, nextType) {
+  const markups_array = createMarkupsArray(p.markups, p.type);
   if (markups_array.length > 0) {
     let previousIndex = 0,
       text = p.text,
@@ -209,7 +232,7 @@ function processParagraph(p, sequence,preType,nextType) {
         tokens.push(markups_array[j]);
       }
     }
-  
+
     tokens = processMarkupSpace(tokens);
     tokens.push(text.substring(j - 1));
     p.text = tokens.join("");
@@ -239,7 +262,10 @@ function processParagraph(p, sequence,preType,nextType) {
       p.text = "> # " + p.text.replace(/\n/g, "\n> # ");
       break;
     case 8:
-      p.text = (preType===8?"\n":"\n```\n") + p.text.replace(/\n/g, "\n")+(nextType===8?"":"\n```");
+      p.text =
+        (preType === 8 ? "\n" : "\n```\n") +
+        p.text.replace(/\n/g, "\n") +
+        (nextType === 8 ? "" : "\n```");
       break;
     case 9:
       markup = "\n* ";
@@ -248,8 +274,7 @@ function processParagraph(p, sequence,preType,nextType) {
       markup = "\n " + sequence + ". ";
       break;
     case 11:
-      p.text =
-        '';
+      p.text = "";
       break;
     case 13:
       markup = "\n### ";
@@ -259,16 +284,14 @@ function processParagraph(p, sequence,preType,nextType) {
       break;
   }
 
-  if(p.text[0]==="⦁"){
-    p.text="-"+(p.text[1]===" "?"":" ")+p.text.substring(1)
+  if (p.text[0] === "⦁") {
+    p.text = "-" + (p.text[1] === " " ? "" : " ") + p.text.substring(1);
   }
   p.text = markup + p.text + "\n";
 
-
-
   // 除了代码块之外的小于号避免被md作为标签处理
-  if(p.type!==8){
-    p.text = p.text.replace(/</g,"\\<");
+  if (p.type !== 8) {
+    p.text = p.text.replace(/</g, "\\<");
   }
 
   if (p.alignment === 2 && p.type !== 6 && p.type !== 7) {
@@ -279,11 +302,10 @@ function processParagraph(p, sequence,preType,nextType) {
 
 // for the first position is space
 function processMarkupSpace(tokens) {
-  
   let times = 0; // ** times
   for (let i = 0; i < tokens.length; i++) {
     const ele = tokens[i];
-    if (ele.indexOf("**")>-1) {
+    if (ele.indexOf("**") > -1) {
       times = times + 1;
       // 奇数后的空格
       if (times % 2 === 1 && tokens[i + 1] && tokens[i + 1][0] === " ") {
@@ -292,52 +314,59 @@ function processMarkupSpace(tokens) {
         i = i + 1;
       }
       // 偶数前的空格
-      if (times % 2 === 0 && tokens[i - 1] && tokens[i - 1][(tokens[i - 1].length-1)] === " ") {
-        tokens[i - 1] = tokens[i - 1].substring(0,tokens[i - 1].length-1);
-        tokens[i + 1] = " "+tokens[i + 1];
+      if (
+        times % 2 === 0 &&
+        tokens[i - 1] &&
+        tokens[i - 1][tokens[i - 1].length - 1] === " "
+      ) {
+        tokens[i - 1] = tokens[i - 1].substring(0, tokens[i - 1].length - 1);
+        tokens[i + 1] = " " + tokens[i + 1];
         i = i + 1;
       }
     }
 
-    if (ele === "["&&tokens[i + 1] && tokens[i + 1][0] === " ") {
+    if (ele === "[" && tokens[i + 1] && tokens[i + 1][0] === " ") {
       tokens[i + 1] = tokens[i + 1].substring(1);
       tokens[i - 1] = tokens[i - 1] + " ";
       i = i + 1;
     }
-    if (ele === "]"&&tokens[i - 1] && tokens[i - 1][(tokens[i - 1].length-1)] === " ") {
-      tokens[i - 1] = tokens[i - 1].substring(0,tokens[i - 1].length-1);
-      tokens[i + 1] = " "+tokens[i + 1];
+    if (
+      ele === "]" &&
+      tokens[i - 1] &&
+      tokens[i - 1][tokens[i - 1].length - 1] === " "
+    ) {
+      tokens[i - 1] = tokens[i - 1].substring(0, tokens[i - 1].length - 1);
+      tokens[i + 1] = " " + tokens[i + 1];
       i = i + 1;
     }
-    
   }
   return tokens;
 }
 
 function addMarkup(markups_array, open, close, start, end) {
   if (markups_array[start]) {
-    markups_array[start] = markups_array[start]+open;
+    markups_array[start] = markups_array[start] + open;
   } else {
     markups_array[start] = open;
   }
   if (markups_array[end]) {
-    markups_array[end] = close+markups_array[end];
+    markups_array[end] = close + markups_array[end];
   } else {
     markups_array[end] = close;
   }
   return markups_array;
 }
 
-function createMarkupsArray(markups,pType) {
+function createMarkupsArray(markups, pType) {
   let markups_array = [];
-  if (!markups || markups.length === 0||pType===8) {
+  if (!markups || markups.length === 0 || pType === 8) {
     return markups_array;
   }
   //标题一律取消加粗
-  if(pType===2||pType===3||pType===13){
-    markups=markups.filter(m=>!(m.type==1||m.type))
+  if (pType === 2 || pType === 3 || pType === 13) {
+    markups = markups.filter(m => !(m.type == 1 || m.type));
   }
-  markups=markups.sort((a,b)=>(b.end-b.start)-(a.end-a.start))
+  markups = markups.sort((a, b) => b.end - b.start - (a.end - a.start));
 
   for (let i = 0; i < markups.length; i++) {
     const m = markups[i];
@@ -353,9 +382,9 @@ function createMarkupsArray(markups,pType) {
         break;
       case 10: // code tag
         if (m.end - m.start < 30) {
-          addMarkup(markups_array, '`', '`', m.start, m.end)
+          addMarkup(markups_array, "`", "`", m.start, m.end);
         }
-        break
+        break;
       default:
         console.log("Unknown markup type" + m.type, m);
         break;

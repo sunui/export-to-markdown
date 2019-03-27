@@ -14,6 +14,7 @@
 <div class="discussion-sidebar-item js-discussion-sidebar-item">
   <div class="text-bold mb-2">未发布文章</div>
   <ul id="newissues" class="list-style-none">
+  loading...
   </ul>
 </div>
 `;
@@ -65,7 +66,10 @@
         body: JSON.stringify(query)
       })
         .then(res => res.json())
-        .catch(error => console.error("Error:", error))
+        .catch(error => {
+          console.error("Error:", error)
+          find("#newissues").innerHTML=""
+        })
         .then(res => {
           const notIssues=res.data.repository.pullRequests.nodes
           .filter(p => {
@@ -85,6 +89,7 @@
             const fullpath="https://github.com/xitu/gold-miner/blob/master/"+path
             return fetch(raw)
           })).then(a=>{
+           find("#newissues").innerHTML=""
            a.map(r=>{
               return r.ok&&r.text().then(r=>{
                 const texts=r.split("\n")
