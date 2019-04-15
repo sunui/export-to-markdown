@@ -20,7 +20,7 @@
 
       flag=true
       setInterval(()=>{
-        if(find(".issues-listing")&&find(".selected").href.includes("xitu/gold-miner/issues")){
+        if(find(".selected").href.includes("xitu/gold-miner/issues")){    
           if(flag){
             flag=false;
             this.getNotIssue();
@@ -84,6 +84,7 @@
               return (co.author.login==="fanyijihua")&&
               co.body.includes("棒极啦 :tada:")
             })
+           
 
             return {
               id:issue.number,
@@ -92,8 +93,8 @@
             }
             
           }).filter(i=>i.delay>i.days)
-
-
+          
+          console.log(1,issues)
           issues.forEach(i=>{
 
             var newNode = document.createElement("span");

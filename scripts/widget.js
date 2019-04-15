@@ -320,7 +320,7 @@ function processMarkupSpace(tokens) {
         tokens[i - 1][tokens[i - 1].length - 1] === " "
       ) {
         tokens[i - 1] = tokens[i - 1].substring(0, tokens[i - 1].length - 1);
-        tokens[i + 1] = " " + tokens[i + 1];
+        tokens[i + 1] = " " + (tokens[i + 1]&&tokens[i + 1]||"");
         i = i + 1;
       }
     }
@@ -336,7 +336,7 @@ function processMarkupSpace(tokens) {
       tokens[i - 1][tokens[i - 1].length - 1] === " "
     ) {
       tokens[i - 1] = tokens[i - 1].substring(0, tokens[i - 1].length - 1);
-      tokens[i + 1] = " " + tokens[i + 1];
+      tokens[i + 1] = " " + (tokens[i + 1]&&tokens[i + 1]||"");
       i = i + 1;
     }
   }
@@ -366,6 +366,10 @@ function createMarkupsArray(markups, pType) {
   if (pType === 2 || pType === 3 || pType === 13) {
     markups = markups.filter(m => !(m.type == 1 || m.type));
   }
+  //过滤掉 bold&&italic
+  markups = markups.filter(m => {
+    return !(m.type===2&&markups.find(mm=>mm.type===1&&m.start===mm.start&&m.end===mm.end))
+  });
   markups = markups.sort((a, b) => b.end - b.start - (a.end - a.start));
 
   for (let i = 0; i < markups.length; i++) {
