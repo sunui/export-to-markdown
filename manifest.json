@@ -26,7 +26,7 @@
             ]
         }
     ],
-    "description":"This is utilized to export the story in Medium to a markdown format file.",
+    "name":"Export to Markdown\uff08\u6398\u91d1\u7ffb\u8bd1\u8ba1\u5212\u7248\uff09",
     "short_name":"ExportToMarkdown",
     "icons":{
         "128":"icons/medium.png",
@@ -34,22 +34,22 @@
         "48":"icons/medium-48.png",
         "16":"icons/medium-16.png"
     },
+    "manifest_version":2,
+    "homepage_url":"https://github.com/sunui/export-to-markdown",
+    "version":"0.3.6",
     "background":{
         "scripts":[
             "scripts/background.js"
         ]
     },
-    "name":"Export to Markdown\uff08\u6398\u91d1\u7ffb\u8bd1\u8ba1\u5212\u7248\uff09",
-    "homepage_url":"https://github.com/sunui/export-to-markdown",
-    "version":"0.3.5",
-    "manifest_version":2,
-    "browser_action":{
-        "default_title":"Export to Markdown\uff08\u6398\u91d1\u7ffb\u8bd1\u8ba1\u5212\u7248\uff09",
-        "default_icon":"icons/medium.png",
-        "default_popup":"popup.html"
-    },
     "permissions":[
         "activeTab",
         "https://*/*"
-    ]
+    ],
+    "browser_action":{
+        "default_popup":"popup.html",
+        "default_title":"Export to Markdown\uff08\u6398\u91d1\u7ffb\u8bd1\u8ba1\u5212\u7248\uff09",
+        "default_icon":"icons/medium.png"
+    },
+    "description":"This is utilized to export the story in Medium to a markdown format file."
 }
