@@ -66,14 +66,7 @@ rules.heading = {
   replacement: function (content, node, options) {
     var hLevel = Number(node.nodeName.charAt(1));
 
-    if (options.headingStyle === 'setext' && hLevel < 3) {
-      var underline = repeat((hLevel === 1 ? '=' : '-'), content.length);
-      return (
-        '\n\n' + content + '\n' + underline + '\n\n'
-      )
-    } else {
-      return '\n\n' + repeat('#', hLevel) + ' ' + content + '\n\n'
-    }
+    return '\n\n' + repeat('#', hLevel) + ' ' + content + '\n\n'
   }
 };
 
@@ -108,7 +101,7 @@ rules.listItem = {
       .replace(/^\n+/, '') // remove leading newlines
       .replace(/\n+$/, '\n') // replace trailing newlines with just a single one
       .replace(/\n/gm, '\n    '); // indent
-    var prefix = options.bulletListMarker + '   ';
+    var prefix = options.bulletListMarker + ' ';
     var parent = node.parentNode;
     if (parent.nodeName === 'OL') {
       var start = parent.getAttribute('start');
@@ -133,9 +126,9 @@ rules.indentedCodeBlock = {
 
   replacement: function (content, node, options) {
     return (
-      '\n\n    ' +
-      node.firstChild.textContent.replace(/\n/g, '\n    ') +
-      '\n\n'
+      '\n\n'+ options.fence +'\n' +
+      node.firstChild.textContent.replace(/\n/g, '\n') +
+      '\n'+ options.fence +'\n\n'
     )
   }
 };
@@ -661,9 +654,9 @@ function TurndownService (options) {
     headingStyle: 'setext',
     hr: '* * *',
     bulletListMarker: '*',
-    codeBlockStyle: 'indented',
+    codeBlockStyle: 'fenced',
     fence: '```',
-    emDelimiter: '_',
+    emDelimiter: '**',
     strongDelimiter: '**',
     linkStyle: 'inlined',
     linkReferenceStyle: 'full',
