@@ -106,7 +106,7 @@ rules.listItem = {
     if (parent.nodeName === 'OL') {
       var start = parent.getAttribute('start');
       var index = Array.prototype.indexOf.call(parent.children, node);
-      prefix = (start ? Number(start) + index : index + 1) + '.  ';
+      prefix = (start ? Number(start) + index : index + 1) + '. ';
     }
     return (
       prefix + content + (node.nextSibling && !/\n$/.test(content) ? '\n' : '')
@@ -137,9 +137,11 @@ rules.fencedCodeBlock = {
   filter: function (node, options) {
     return (
       options.codeBlockStyle === 'fenced' &&
-      node.nodeName === 'PRE' &&
+((node.nodeName === 'PRE' &&
       node.firstChild &&
-      node.firstChild.nodeName === 'CODE'
+      node.firstChild.nodeName === 'CODE')||(node.nodeName === 'CODE' &&
+      node.firstChild &&
+      node.firstChild.nodeName === 'PRE'))
     )
   },
 
