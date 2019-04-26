@@ -253,8 +253,8 @@ function parseJsonToMarkdown(jsonStr) {
 
   let sequence = 0;
   for (let i = 0; i < paragraphs.length; i++) {
-    if (sections[i]) {
-      story.markdown.push(sections[i]);
+    if (sections[i+1]) {
+      story.markdown.push(sections[i+1]);
     }
     const p = paragraphs[i];
     if (p.type === 10) {
