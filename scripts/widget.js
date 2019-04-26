@@ -63,7 +63,7 @@ function exportMedium() {
           );
         }
       })
-      .then(function(res) {
+      .then(async function(res) {
         let markdownText = "";
         let title = "";
         var isHtml = false;
@@ -118,6 +118,66 @@ ${markdownText}
           const story = parseJsonToMarkdown(res);
           title = story.title;
           slug = story.slug;
+          console.log(story.markdown)
+
+          if(story.markdown.some(p=>{return p.mediaResourceId})){
+          console.log(111)
+
+            const getCode=gist=>{
+              if(!gist.id){
+                return "";
+              }
+              return fetch(`https://api.github.com/gists/${gist.id}`)
+              .then(function(res) {
+                if (res.ok) {
+                  return res.text();
+                } else {
+                  console.error(
+                    "The fetch fails, and the response code is " + res.status
+                  );
+                }
+              }).then(function(res){
+                const data = JSON.parse(res);
+                console.log(gist)
+                console.log(data)
+                const file=Object.values(data.files)[0]
+                return '\n```'+file.language+'\n'+file.content+'\n```\n';
+              })
+            }
+
+            const getGistId=mediaResourceId=>{
+              return fetch(activeTab.url.split("/").slice(0,-1).join("/")+`/media/${mediaResourceId}?format=json`)
+              .then(function(res) {
+                if (res.ok) {
+                  return res.text();
+                } else {
+                  console.error(
+                    "The fetch fails, and the response code is " + res.status
+                  );
+                }
+              }).then(function(jsonStr){
+                const str = jsonStr.substring(16, jsonStr.length);
+                const data = JSON.parse(str);
+                if(data.payload.value.gist&&data.payload.value.title){
+                  return {id:data.payload.value.gist.gistId,title:data.payload.value.title};
+                }else{
+                  return ""
+                }
+              })
+            }
+
+            const paragraphsMap = async item => {
+              if(item.mediaResourceId){
+                const gitst =await getGistId(item.mediaResourceId);
+                return await getCode(gitst)
+              }else{
+                return item
+              }
+            }
+
+            story.markdown= await Promise.all(story.markdown.map(item => paragraphsMap(item)))
+console.log(story.markdown)
+          }
           markdownText = `> * 原文地址：[${title}](${activeTab.url})
 > * 原文作者：[${story.author.name}](${story.author.url})
 > * 译文出自：[掘金翻译计划](https://github.com/xitu/gold-miner)
@@ -311,7 +371,13 @@ function processParagraph(p, sequence, preType, nextType) {
   if (p.alignment === 2 && p.type !== 6 && p.type !== 7) {
     p.text = "<center>" + p.text + "</center>";
   }
-  return p.text;
+
+  // 处理gist
+  if(p.type===11&&p.iframe&&p.iframe.mediaResourceId){
+    return {mediaResourceId:p.iframe.mediaResourceId}
+  }else{
+    return p.text;
+  }
 }
 
 // for the first position is space
