@@ -345,7 +345,7 @@ function processParagraph(p, sequence, preType, nextType) {
       markup = "\n* ";
       break;
     case 10:
-      markup = "\n " + sequence + ". ";
+      markup = "\n" + sequence + ". ";
       break;
     case 11:
       p.text = "";

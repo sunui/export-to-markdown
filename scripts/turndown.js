@@ -136,22 +136,21 @@ rules.indentedCodeBlock = {
 rules.fencedCodeBlock = {
   filter: function (node, options) {
     return (
-      options.codeBlockStyle === 'fenced' &&
-((node.nodeName === 'PRE' &&
-      node.firstChild &&
-      node.firstChild.nodeName === 'CODE')||(node.nodeName === 'CODE' &&
-      node.firstChild &&
-      node.firstChild.nodeName === 'PRE'))
+      options.codeBlockStyle === 'fenced' &&((node.nodeName === 'PRE' &&
+      node.firstElementChild &&
+      node.firstElementChild.nodeName === 'CODE')||(node.nodeName === 'CODE' &&
+      node.firstElementChild &&
+      node.firstElementChild.nodeName === 'PRE'))
     )
   },
 
   replacement: function (content, node, options) {
-    var className = node.firstChild.className || '';
+    var className = node.firstElementChild.className || '';
     var language = (className.match(/language-(\S+)/) || [null, ''])[1];
 
     return (
       '\n\n' + options.fence + language + '\n' +
-      node.firstChild.textContent +
+      node.firstElementChild.textContent +
       '\n' + options.fence + '\n\n'
     )
   }
