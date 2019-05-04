@@ -70,7 +70,7 @@ function exportMedium() {
         try {
           const str = res.substring(16, res.length);
           const temp = JSON.parse(str);
-        } catch {
+        } catch(err) {
           isHtml = true;
         }
 
