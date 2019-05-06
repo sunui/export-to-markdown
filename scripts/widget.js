@@ -146,7 +146,7 @@ ${markdownText}
             }
 
             const getGistId=mediaResourceId=>{
-              return fetch(activeTab.url.split("/").slice(0,-1).join("/")+`/media/${mediaResourceId}?format=json`)
+              return fetch(`https://medium.com/media/${mediaResourceId}?format=json`)
               .then(function(res) {
                 if (res.ok) {
                   return res.text();
