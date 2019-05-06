@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    textarea {
+      width: 760px;
+      height:540px;
+    }
+
+    .buttons{
+      padding-bottom: 5px;
+    }
+
+    .buttons span {
+      display: inline;
+      margin-right: 5px;
+      font-weight: bold;
+    }
+
+    h1,
+    button {
+      display: inline;
+      color: gray;
+      border-radius: 5px;
+      font-weight: bold;
+      filter: alpha(opacity=50)
+    }
+
+    #shadow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      background-color: #000;
+      opacity: .2;
+      filter: alpha(opacity=20);
+    }
+
+    .load {
+      width: 50px;
+      height: 50px;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      -webkit-animation: spin1 2s infinite linear;
+      -moz-animation: spin1 2s infinite linear;
+      -o-animation: spin1 2s infinite linear;
+      -ms-animation: spin1 2s infinite linear;
+      animation: spin1 2s infinite linear;
+      display: block;
+      visibility: hidden;
+    }
+
+    @-webkit-keyframes spin1 {
+      0% {
+        -webkit-transform: rotate(0deg);
+      }
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @-moz-keyframes spin1 {
+      0% {
+        -moz-transform: rotate(0deg);
+      }
+      100% {
+        -moz-transform: rotate(360deg);
+      }
+    }
+
+    @-o-keyframes spin1 {
+      0% {
+        -o-transform: rotate(0deg);
+      }
+      100% {
+        -o-transform: rotate(360deg);
+      }
+    }
+
+    @-ms-keyframes spin1 {
+      0% {
+        -ms-transform: rotate(0deg);
+      }
+      100% {
+        -ms-transform: rotate(360deg);
+      }
+    }
+  </style>
+  <title>export to markdown (掘金翻译计划版)</title>
+</head>
+
+<body>
+
+  <div class="main">
+    <div class="buttons">
+      <span><button class="copy">复制</button></span>
+      <span><button class="create">复制&&去提交</button></span>
+    </div>
+
+    <span><img src="load.svg" class="load"></span>
+    <div class="left-area">
+      <textarea id="source"></textarea>
+    </div>
+  </div>
+  <script src="scripts/turndown.js"></script>
+  <script src="scripts/widget.js"></script>
+</body>
+
+</html>
