@@ -56,6 +56,9 @@
           ios: issues(last: $number_of_issues, labels: "iOS", orderBy: $issue_order) {
             ...theIssue
           }
+          flutter: issues(last: $number_of_issues, labels: "Flutter", orderBy: $issue_order) {
+            ...theIssue
+          }
           ai: issues(last: $number_of_issues, labels: "AI", orderBy: $issue_order) {
             ...theIssue
           }
@@ -105,6 +108,7 @@
               be: "后端",
               android: "Android",
               ios: "iOS",
+              flutter:"Flutter",
               ai: "AI",
               design: "设计",
               product: "产品",
