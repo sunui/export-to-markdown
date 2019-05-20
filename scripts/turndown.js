@@ -140,6 +140,8 @@ rules.fencedCodeBlock = {
       node.firstElementChild &&
       node.firstElementChild.nodeName === 'CODE')||(node.nodeName === 'CODE' &&
       node.firstElementChild &&
+      node.firstElementChild.nodeName === 'PRE')||(node.nodeName === 'DIV' &&
+      node.firstElementChild &&
       node.firstElementChild.nodeName === 'PRE'))
     )
   },
