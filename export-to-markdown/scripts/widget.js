@@ -361,7 +361,7 @@ function processParagraph(p, sequence, preType, nextType) {
   if (p.text[0] === "⦁") {
     p.text = "-" + (p.text[1] === " " ? "" : " ") + p.text.substring(1);
   }
-  p.text = markup + p.text + "\n";
+  p.text = markup + p.text + (((p.type==9&&nextType==9)||(p.type==10&&nextType==10))?"":"\n");
 
   // 除了代码块之外的小于号避免被md作为标签处理
   if (p.type !== 8) {
