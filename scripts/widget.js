@@ -330,10 +330,10 @@ function processParagraph(p, sequence, preType, nextType) {
       p.text = "\n![" + p.text + "](" + imageSrc + ")";
       break;
     case 6:
-      markup = "> ";
+      markup = "\n> ";
       break;
     case 7:
-      p.text = "> # " + p.text.replace(/\n/g, "\n> # ");
+      p.text = "\n> # " + p.text.replace(/\n/g, "\n> # ");
       break;
     case 8:
       p.text =
@@ -351,7 +351,7 @@ function processParagraph(p, sequence, preType, nextType) {
       p.text = "";
       break;
     case 13:
-      markup = "\n### ";
+      markup = "\n> ";
       break;
     case 15:
       p.text = "*" + p.text + "*";
@@ -361,7 +361,12 @@ function processParagraph(p, sequence, preType, nextType) {
   if (p.text[0] === "⦁") {
     p.text = "-" + (p.text[1] === " " ? "" : " ") + p.text.substring(1);
   }
-  p.text = markup + p.text + (((p.type==9&&nextType==9)||(p.type==10&&nextType==10))?"":"\n");
+
+  if(p.type==6&&nextType==6){
+    p.text = markup + p.text + "\n>";    
+  }else{
+    p.text = markup + p.text + (((p.type==9&&nextType==9)||(p.type==10&&nextType==10))?"":"\n");
+  }
 
   // 除了代码块之外的小于号避免被md作为标签处理
   if (p.type !== 8) {
