@@ -278,7 +278,7 @@ function parseJsonToMarkdown(jsonStr) {
 }
 
 function processSection(s) {
-  let section = "\n***\n";
+  let section = "\n---\n";
   if (s.backgroundImage) {
     const imageWidth = parseInt(s.backgroundImage.originalWidth, 10);
     const imageSrc =
@@ -351,7 +351,7 @@ function processParagraph(p, sequence, preType, nextType) {
       p.text = "";
       break;
     case 13:
-      markup = "\n> ";
+      markup = "\n#### ";
       break;
     case 15:
       p.text = "*" + p.text + "*";
