@@ -15,8 +15,6 @@ def move_files():
   shutil.copyfile('manifest.json', zip_dir + '/manifest.json')
   shutil.copyfile('popup.html', zip_dir + '/popup.html')
   shutil.copyfile('load.svg', zip_dir + '/load.svg')
-  os.remove(zip_dir + '/scripts/turndown.js')
-
 
 def zip():
   zipf = zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED)
