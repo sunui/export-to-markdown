@@ -655,7 +655,7 @@ function TurndownService (options) {
   var defaults = {
     rules: rules,
     headingStyle: 'setext',
-    hr: '* * *',
+    hr: '---',
     bulletListMarker: '*',
     codeBlockStyle: 'fenced',
     fence: '```',

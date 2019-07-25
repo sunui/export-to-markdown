@@ -18,7 +18,7 @@
   </ul>
 </div>
 `;
-      find(".col-md-3").prepend(newNode);
+      find(".timeline-comment-wrapper").prepend(newNode);
       this.getNotIssue();
     },
     getNotIssue() {
@@ -81,6 +81,7 @@
             });
           })
           .map(p=>{
+            console.log("无ISSUE PR:",p)
             return p.files.nodes[0].path
           })
 
