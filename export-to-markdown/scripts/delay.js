@@ -89,7 +89,7 @@
             return {
               id:issue.number,
               delay:ed&&(new Date().getTime()-new Date(ed.createdAt).getTime())/(1000*60*60*24),
-              days:Number(issue.body.match(/(翻译时间：[ ]*)(\d+)([ ]*天)/)[2])||10
+              days:Number(issue.body.match(/(翻译时间：[ ]*)(\d+)([ ]*天)/)&&issue.body.match(/(翻译时间：[ ]*)(\d+)([ ]*天)/)[2])||10
             }
             
           }).filter(i=>i.delay>i.days)
