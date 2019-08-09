@@ -112,7 +112,7 @@
                 const aa = document.createElement("a");
                 const li = document.createElement("li");
                 aa.innerHTML=ob.title
-                aa.href="https://github.com/xitu/gold-miner/issues/new?labels=翻译认领&assignees=leviding&title="+encodeURIComponent(ob.title)+"&body="+encodeURIComponent(ob.body)
+                aa.href="https://github.com/xitu/gold-miner/issues/new?labels=翻译认领&assignees=Glowin&title="+encodeURIComponent(ob.title)+"&body="+encodeURIComponent(ob.body)
                 find("#newissues").appendChild(li).appendChild(aa)
                 console.log(ob)
               })
