@@ -30,7 +30,7 @@ createBtn.addEventListener("click", function() {
   copyToClipboard(value);
   bg.data = value;
 
-  window.open("https://github.com/xitu/gold-miner/new/master/TODO1");
+  window.open("https://github.com/xitu/gold-miner/new/master/article/2020");
 });
 
 function createLoadForm() {
@@ -93,7 +93,7 @@ function exportMedium() {
               document.querySelector("#source").value = `> * 原文地址：[]()
 > * 原文作者：[]()
 > * 译文出自：[掘金翻译计划](https://github.com/xitu/gold-miner)
-> * 本文永久链接：[https://github.com/xitu/gold-miner/blob/master/TODO1/.md](https://github.com/xitu/gold-miner/blob/master/TODO1/.md)
+> * 本文永久链接：[https://github.com/xitu/gold-miner/blob/master/article/2020/.md](https://github.com/xitu/gold-miner/blob/master/article/2020/.md)
 > * 译者：
 > * 校对者：
 
@@ -181,7 +181,7 @@ console.log(story.markdown)
           markdownText = `> * 原文地址：[${title}](${activeTab.url})
 > * 原文作者：[${story.author.name}](${story.author.url})
 > * 译文出自：[掘金翻译计划](https://github.com/xitu/gold-miner)
-> * 本文永久链接：[https://github.com/xitu/gold-miner/blob/master/TODO1/${slug}.md](https://github.com/xitu/gold-miner/blob/master/TODO1/${slug}.md)
+> * 本文永久链接：[https://github.com/xitu/gold-miner/blob/master/article/2020/${slug}.md](https://github.com/xitu/gold-miner/blob/master/article/2020/${slug}.md)
 > * 译者：
 > * 校对者：
 
