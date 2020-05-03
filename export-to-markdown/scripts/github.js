@@ -30,7 +30,7 @@
             const line = filePath.find(l => l.indexOf("本文永久链接") > -1);
             console.log(line);
             const title = line.substring(
-              line.indexOf("article/2020/") + 13,
+              line.indexOf("TODO1/") + 6,
               line.indexOf(".md") + 3
             );
             console.log(2, title);
