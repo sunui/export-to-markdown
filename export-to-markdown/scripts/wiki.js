@@ -95,7 +95,6 @@
           Authorization: "Bearer 545c28023ff1317b390c66b3d0b476233301de1c",
           "content-type": "application/json"
         },
-        credentials: "include",
         body: JSON.stringify(data)
       })
         .then(res => res.json())

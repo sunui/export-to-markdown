@@ -62,7 +62,6 @@
           Authorization: "Bearer 545c28023ff1317b390c66b3d0b476233301de1c",
           "content-type": "application/json"
         },
-        credentials: "include",
         body: JSON.stringify(query)
       })
         .then(res => res.json())
@@ -77,12 +76,12 @@
           })
           .filter(p => {
             return !res.data.repository.issues.nodes.some(i => {
-              return i.body.includes(p.files.nodes[0].path);
+              return i.body.includes(p.files.nodes[0]&&p.files.nodes[0].path);
             });
           })
           .map(p=>{
             console.log("无ISSUE PR:",p)
-            return p.files.nodes[0].path
+            return p.files.nodes[0]&&p.files.nodes[0].path
           })
 
           Promise.all(notIssues.map(path=>{
