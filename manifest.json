@@ -2,7 +2,7 @@
     "content_scripts":[
         {
             "matches":[
-                "*://github.com/xitu/gold-miner/new/master/article/2020*"
+                "*://github.com/xitu/gold-miner/new/master/article/2021*"
             ],
             "js":[
                 "scripts/github.js"

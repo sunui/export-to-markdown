@@ -100,7 +100,7 @@
 * Markdown文件：[文件地址]${texts[3].match(/(?<=\])\(.+\)/)[0]}
 * PR 地址：
 * 文章分类：** **
-* **注意：文件位置在 \`article/2020\` 文件夹中，不是之前的 \`TODO1\` 了。**
+* **注意：文件位置在 \`article/2021\` 文件夹中，不是之前的 \`article/2020\` 了。**
 ----
 * 翻译时间： 天
 * 校对时间： 天
@@ -111,7 +111,7 @@
                 const aa = document.createElement("a");
                 const li = document.createElement("li");
                 aa.innerHTML=ob.title
-                aa.href="https://github.com/xitu/gold-miner/issues/new?labels=翻译认领&assignees=Glowin&title="+encodeURIComponent(ob.title)+"&body="+encodeURIComponent(ob.body)
+                aa.href="https://github.com/xitu/gold-miner/issues/new?labels=翻译认领&title="+encodeURIComponent(ob.title)+"&body="+encodeURIComponent(ob.body)
                 find("#newissues").appendChild(li).appendChild(aa)
                 console.log(ob)
               })
